@@ -1,6 +1,7 @@
 import PlaceCard from '@/components/PlaceCard';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '@/constants';
+import { type PlaceItem } from '@/types';
 
 type SectionProps = {
   title: string;
@@ -8,7 +9,7 @@ type SectionProps = {
 };
 
 export default function Section({ title, endpoint }: SectionProps) {
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<PlaceItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
