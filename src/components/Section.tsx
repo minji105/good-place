@@ -1,4 +1,4 @@
-import PlaceCard from './PlaceCard';
+import PlaceCard from '@/components/PlaceCard';
 
 type SectionProps = {
   title: string;
