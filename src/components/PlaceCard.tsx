@@ -1,17 +1,5 @@
 import { BASE_URL } from '@/constants';
-
-type Image = {
-  src: string;
-  alt: string;
-};
-
-type PlaceItem = {
-  description: string;
-  image: Image;
-  lat: number;
-  lon: number;
-  title: string;
-};
+import { type PlaceItem } from '@/types';
 
 export default function PlaceCard({ item }: { item: PlaceItem }) {
   return (
