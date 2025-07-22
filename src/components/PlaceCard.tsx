@@ -5,7 +5,7 @@ type Image = {
   alt: string;
 };
 
-type item = {
+type PlaceItem = {
   description: string;
   image: Image;
   lat: number;
@@ -13,7 +13,7 @@ type item = {
   title: string;
 };
 
-export default function PlaceCard({ item }: { item: item }) {
+export default function PlaceCard({ item }: { item: PlaceItem }) {
   return (
     <div className="aspect-[0.8] bg-stone-200">
       <img
