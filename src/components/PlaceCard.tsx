@@ -1,19 +1,7 @@
 import { BASE_URL } from '@/constants';
+import { type PlaceItem } from '@/types';
 
-type Image = {
-  src: string;
-  alt: string;
-};
-
-type item = {
-  description: string;
-  image: Image;
-  lat: number;
-  lon: number;
-  title: string;
-};
-
-export default function PlaceCard({ item }: { item: item }) {
+export default function PlaceCard({ item }: { item: PlaceItem }) {
   return (
     <div className="aspect-[0.8] bg-stone-200">
       <img
