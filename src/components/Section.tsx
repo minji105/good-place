@@ -2,6 +2,8 @@ import PlaceCard from '@/components/PlaceCard';
 import { useEffect, useState } from 'react';
 import { type PlaceItem } from '@/types';
 import { fetchPlaces } from '@/api/places';
+import { useGeoLocation } from '@/hooks/useGeoLocation';
+import { sortPlacesByDistance } from '@/utils/loc';
 
 type SectionProps = {
   title: string;
@@ -9,6 +11,7 @@ type SectionProps = {
 };
 
 export default function Section({ title, endpoint }: SectionProps) {
+  const { location, error: locError } = useGeoLocation();
   const [list, setList] = useState<PlaceItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -19,7 +22,7 @@ export default function Section({ title, endpoint }: SectionProps) {
         setLoading(true);
         setError('');
         const places = await fetchPlaces({ endpoint });
-        setList(places);
+        setList(sortPlacesByDistance(places, location.lat, location.lon));
       } catch (error: any) {
         setError(error.message);
       } finally {
