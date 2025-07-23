@@ -15,6 +15,7 @@ export default function Section({ title, endpoint }: SectionProps) {
   const [list, setList] = useState<PlaceItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  const [isDefaultSort, setIsDefaultSort] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchList = async () => {
@@ -22,7 +23,7 @@ export default function Section({ title, endpoint }: SectionProps) {
         setLoading(true);
         setError('');
         const places = await fetchPlaces({ endpoint });
-        setList(sortPlacesByDistance(places, location.lat, location.lon));
+        setList(places);
       } catch (error: any) {
         setError(error.message);
       } finally {
@@ -33,42 +34,46 @@ export default function Section({ title, endpoint }: SectionProps) {
     fetchList();
   }, [endpoint]);
 
-  let content;
+  const renderList = isDefaultSort
+    ? list
+    : sortPlacesByDistance(list, location.lat, location.lon);
 
-  if (loading) {
-    content = (
-      <div className="bg-gray-100 p-8">
-        <p>맛집을 불러오는 중입니다...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    content = <div className="bg-red-100 p-8">{error}</div>;
-  }
-
-  if (list.length > 0) {
-    content = (
-      <div className="grid grid-cols-3 justify-center gap-8 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-        {list.map((item, index) => (
-          <PlaceCard key={index} item={item} />
-        ))}
-      </div>
-    );
-  }
-
-  if (list.length === 0 && !loading && !error) {
-    content = (
-      <div className="bg-gray-100 p-8">
-        <p>목록이 비었습니다.</p>
-      </div>
-    );
-  }
+  const handleClickButton = () => {
+    if (locError) {
+      return alert(locError);
+    }
+    setIsDefaultSort(prev => !prev);
+  };
 
   return (
     <section className="p-8">
-      <h2 className="mb-4 text-4xl">{title}</h2>
-      {content}
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-4xl">{title}</h2>
+        <button
+          className={`rounded-md p-3 ${isDefaultSort ? 'bg-gray-100' : 'bg-blue-800'} ${isDefaultSort ? 'text-black' : 'text-white'}`}
+          onClick={() => handleClickButton()}
+        >
+          거리순
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="bg-gray-100 p-8">
+          <p>맛집을 불러오는 중입니다...</p>
+        </div>
+      ) : error ? (
+        <div className="bg-red-100 p-8">{error}</div>
+      ) : renderList.length ? (
+        <div className="grid grid-cols-3 justify-center gap-8 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+          {renderList.map((item, index) => (
+            <PlaceCard key={index} item={item} />
+          ))}
+        </div>
+      ) : (
+        <div className="bg-gray-100 p-8">
+          <p>목록이 비었습니다.</p>
+        </div>
+      )}
     </section>
   );
 }
