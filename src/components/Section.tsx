@@ -1,7 +1,7 @@
 import PlaceCard from '@/components/PlaceCard';
 import { useEffect, useState } from 'react';
-import { BASE_URL } from '@/constants';
 import { type PlaceItem } from '@/types';
+import { fetchPlaces } from '@/api/places';
 
 type SectionProps = {
   title: string;
@@ -16,10 +16,8 @@ export default function Section({ title, endpoint }: SectionProps) {
     const fetchList = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${BASE_URL}/${endpoint}`);
-        const data = await res.json();
-        setList(data.places);
-        console.log('fetch data: ', data.places);
+        const places = await fetchPlaces({ endpoint });
+        setList(places);
       } catch (error) {
         console.log('fetch error: ', error);
       } finally {
