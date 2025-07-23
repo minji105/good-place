@@ -38,13 +38,20 @@ export default function Section({ title, endpoint }: SectionProps) {
     ? list
     : sortPlacesByDistance(list, location.lat, location.lon);
 
+  const handleClickButton = () => {
+    if (locError) {
+      return alert(locError);
+    }
+    setIsDefaultSort(prev => !prev);
+  };
+
   return (
     <section className="p-8">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-4xl">{title}</h2>
         <button
           className={`rounded-md p-3 ${isDefaultSort ? 'bg-gray-100' : 'bg-blue-800'} ${isDefaultSort ? 'text-black' : 'text-white'}`}
-          onClick={() => setIsDefaultSort(prev => !prev)}
+          onClick={() => handleClickButton()}
         >
           거리순
         </button>
