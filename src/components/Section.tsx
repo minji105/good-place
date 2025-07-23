@@ -33,42 +33,27 @@ export default function Section({ title, endpoint }: SectionProps) {
     fetchList();
   }, [endpoint]);
 
-  let content;
-
-  if (loading) {
-    content = (
-      <div className="bg-gray-100 p-8">
-        <p>맛집을 불러오는 중입니다...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    content = <div className="bg-red-100 p-8">{error}</div>;
-  }
-
-  if (list.length > 0) {
-    content = (
-      <div className="grid grid-cols-3 justify-center gap-8 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-        {list.map((item, index) => (
-          <PlaceCard key={index} item={item} />
-        ))}
-      </div>
-    );
-  }
-
-  if (list.length === 0 && !loading && !error) {
-    content = (
-      <div className="bg-gray-100 p-8">
-        <p>목록이 비었습니다.</p>
-      </div>
-    );
-  }
-
   return (
     <section className="p-8">
       <h2 className="mb-4 text-4xl">{title}</h2>
-      {content}
+
+      {loading ? (
+        <div className="bg-gray-100 p-8">
+          <p>맛집을 불러오는 중입니다...</p>
+        </div>
+      ) : error ? (
+        <div className="bg-red-100 p-8">{error}</div>
+      ) : list.length ? (
+        <div className="grid grid-cols-3 justify-center gap-8 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+          {list.map((item, index) => (
+            <PlaceCard key={index} item={item} />
+          ))}
+        </div>
+      ) : (
+        <div className="bg-gray-100 p-8">
+          <p>목록이 비었습니다.</p>
+        </div>
+      )}
     </section>
   );
 }
